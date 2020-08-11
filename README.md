@@ -1,11 +1,5 @@
 # Flux
 
-## Prerequisites
-Install fluxctl
-```
-brew install fluxctl
-```
-
 ## Deploy
 Add helm repo:
 ```
