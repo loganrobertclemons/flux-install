@@ -1,6 +1,7 @@
 #!/bin/bash
 
 read -p 'GitHub Repo: ' REPO
+read -p 'GitHub Repo Path: ' PATH
 read -p 'GitHub Username: ' USERNAME
 read -p 'GitHub Email: ' EMAIL
 read -sp 'GitHub Password: ' PASSWORD
@@ -22,7 +23,7 @@ EOF
 cat <<EOF >>flux.yaml
 git:
   url: ssh://git@github.com/${USERNAME}/${REPO}.git
-  path: releases
+  path: ${PATH}
   pollInterval: 1m
   user: ${USERNAME}
   email: ${EMAIL}
