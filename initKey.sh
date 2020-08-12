@@ -25,6 +25,6 @@ curl \
   -d '{"key":"$(cat id_rsa.pub)","title":"flux-ssh"}'
 EOF
 
-chmod +x git-key-deploy.sh install*
+chmod +x git-key-deploy.sh
 ./git-key-deploy.sh
 rm git-key-deploy.sh
