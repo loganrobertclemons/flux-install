@@ -4,6 +4,8 @@
 # 0 = Environment
 ##
 
+kubectl create ns flux
+
 # Helm install flux
 helm upgrade --install flux \
 fluxcd/flux --version 1.3.0 \
