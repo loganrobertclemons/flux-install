@@ -5,7 +5,7 @@ git:
   user: loganrobertclemons
   email: loganrobertclemons@gmail.com
   secretName: flux-ssh
-  label: flux-sbx
+  label: gke-dev
 sync:
   # use `.sync.state: secret` to store flux's state as an annotation on the secret (instead of a git tag)
   state: git
