@@ -1,10 +1,5 @@
 #! /bin/bash
 
-# ensure running as root
-if [ "$(id -u)" != "0" ]; then
-  exec sudo "$0" "$@"
-fi
-
 read -p 'GitHub Repo: ' REPO
 read -p 'GitHub Username: ' USERNAME
 read -sp 'GitHub Password: ' PASSWORD
