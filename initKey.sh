@@ -1,5 +1,8 @@
 #! /bin/bash
 
+helm repo add stable https://kubernetes-charts.storage.googleapis.com
+helm repo add fluxcd https://charts.fluxcd.io
+
 read -p 'GitHub Repo: ' REPO
 read -p 'GitHub Username: ' USERNAME
 read -sp 'GitHub Password: ' PASSWORD
