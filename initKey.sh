@@ -9,6 +9,11 @@ read -p 'GitHub Repo: ' REPO
 read -p 'GitHub Username: ' USERNAME
 read -sp 'GitHub Password: ' PASSWORD
 
+#creates the clusterRole for nginx ingress
+kubectl create clusterrolebinding cluster-admin-binding \
+  --clusterrole cluster-admin \
+  --user $(gcloud config get-value account)
+  
 #creates the flux namespace and generates an ssh key
 kubectl create namespace flux
 ssh-keygen -t rsa -N '' -f id_rsa -C flux <<< y
