@@ -1,0 +1,46 @@
+yum install openssl -y
+
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
+helm repo add stable https://charts.helm.sh/stable
+helm repo add fluxcd https://charts.fluxcd.io
+
+read -p 'GitHub Repo: ' REPO
+read -p 'GitHub Username: ' USERNAME
+read -p 'GitHub Token: ' TOKEN
+
+kubectl create namespace flux
+
+helm upgrade -i flux fluxcd/flux \
+--set git.url=git@github.com:${USERNAME}/${REPO} \
+--set git.branch=master \
+--namespace flux
+
+helm upgrade -i helm-operator fluxcd/helm-operator \
+--set helm.versions=v3 \
+--set git.ssh.secretName=flux-git-deploy \
+--set git.branch=master \
+--namespace flux
+
+sleep 20
+
+wget -O /usr/local/bin/fluxctl $(curl https://api.github.com/repos/fluxcd/flux/releases/latest | jq -r ".assets[] | select(.name | test(\"linux_amd64\")) | .browser_download_url")
+chmod 755 /usr/local/bin/fluxctl
+
+fluxctl identity --k8s-fwd-ns flux | tee flux-identity.txt
+
+#creates an executable to be invoked that creates a git deploy key on the repo specified above
+cat <<EOF >>git-key-deploy.sh
+#! /bin/bash
+curl \
+-X POST \
+-H "Authorization: token ${TOKEN}" https://api.github.com/repos/${USERNAME}/${REPO}/keys \
+-d "{\"key\":\"$(cat flux-identity.txt)\", \"title\":\"flux-ssh\"}"
+EOF
+
+chmod +x git-key-deploy.sh
+./git-key-deploy.sh
+rm git-key-deploy.sh
+rm get_helm.sh
